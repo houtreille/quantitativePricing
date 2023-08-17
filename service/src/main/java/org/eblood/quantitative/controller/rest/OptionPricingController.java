@@ -3,7 +3,7 @@ package org.eblood.quantitative.controller.rest;
 
 import com.eblood.finance.quantitative.json.v1.FXOptionDTO;
 import com.eblood.finance.quantitative.option.adapters.rest.handler.OptionApi;
-import org.eblood.quantitative.business.pricing.PricingServiceProxy;
+import org.eblood.quantitative.business.pricing.service.PricingServiceProxy;
 import org.eblood.quantitative.mapper.JsonMapper;
 import org.eblood.quantitative.model.option.FXOptionVanilla;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class OptionPricingController implements OptionApi {
 
      FXOptionVanilla optionToPrice = mapper.map(body);
 
-     pricingService.price(optionToPrice);
+     pricingService.price(optionToPrice, body.);
 
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
