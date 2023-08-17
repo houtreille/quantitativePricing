@@ -62,11 +62,27 @@ components:
       properties:
         curr1:
           type: string
+          minLength: 3
+          maxLength: 3
+          example: EUR
         curr2:
           type: string
+          minLength: 3
+          maxLength: 3
+          example: USD
+        maturityDate:
+          type: string
+          format: date
+          example: 2022-11-25
+        strike:
+          type: number
+          format: double
+          minimum: 0
+          example: 2.5
         valuationDate:
           type: string
           format: date
+          example: 2022-11-25
         pricingMethod:
           type: string
           enum:
@@ -76,6 +92,8 @@ components:
       required:
         - curr1
         - curr2
+        - maturityDate
+        - strike
         - valuationDate
 
 
