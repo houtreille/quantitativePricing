@@ -1,0 +1,90 @@
+
+openapi: 3.0.3
+info:
+  title: Financial Service API
+  description: Financial Service API
+  version: 1.0.0
+servers:
+  - url: "[[${env.financial-service-url}]]"
+    description: XXX
+externalDocs:
+  - url: "[[${env.financial-service-documentation-url}]]"
+
+tags:
+  - VanillaFXOptionPricing
+
+paths:
+  /option/fx/vanilla:
+    post:
+      tags:
+        - VanillaFXOptionPricing
+      summary: Vanilla FX Option Pricing
+      description: Launch Vanilla FX Option Pricing
+      requestBody:
+        content:
+          application/vnd.eblood.option-pricing-api+json:
+            schema:
+              $ref: '#/components/schemas/FXOptionDTO'
+        required: true
+
+      responses:
+        '200':
+          description: Vanilla FX Option successfully priced
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: processed
+
+        '400':
+          description: Invalid status value
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDTO'
+        default:
+          description: unexpected error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDTO'
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    FXOptionDTO:
+      type: object
+      properties:
+        curr1:
+          type: string
+        curr2:
+          type: string
+        valuationDate:
+          type: string
+          format: date
+        pricingMethod:
+          type: string
+          enum:
+            - BSClosedFormula
+            - BSMonteCarlo
+          default: BSClosedFormula
+      required:
+        - curr1
+        - curr2
+        - valuationDate
+
+
+    ProblemDTO:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+
+
