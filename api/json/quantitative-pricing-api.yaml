@@ -31,10 +31,9 @@ paths:
         '200':
           description: Vanilla FX Option successfully priced
           content:
-            text/plain:
+            application/valuation+json:
               schema:
-                type: string
-                example: processed
+                $ref: '#/components/schemas/ValuationDTO'
 
         '400':
           description: Invalid status value
@@ -95,6 +94,19 @@ components:
         - maturityDate
         - strike
         - valuationDate
+
+    ValuationDTO:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+        valuationDate:
+          type: string
+          format: date
+        currency:
+          type: string
+          example: USD
 
 
     ProblemDTO:
