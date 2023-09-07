@@ -20,6 +20,7 @@ paths:
         - VanillaFXOptionPricing
       summary: Vanilla FX Option Pricing
       description: Launch Vanilla FX Option Pricing
+      operationId: vanillaFxOptionPricing
       requestBody:
         content:
           application/vnd.eblood.option-pricing-api+json:
