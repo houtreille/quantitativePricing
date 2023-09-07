@@ -25,7 +25,7 @@ public class OptionPricingController implements OptionApi {
   }
 
 
-  public ResponseEntity<ValuationDTO> optionFxVanillaPost(FXOptionDTO body) {
+  public ResponseEntity<ValuationDTO> vanillaFxOptionPricing(FXOptionDTO body) {
      FXOptionVanilla optionToPrice = mapper.map(body);
      Valuation optionValuation = pricingService.price(optionToPrice, body.getValuationDate(), body.getPricingMethod());
 
