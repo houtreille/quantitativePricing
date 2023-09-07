@@ -17,7 +17,54 @@ tags:
 
 
 paths:
-  /fxSpot:
+  /fxSpot/{currencyPair}/{dateFrom}/{dateTo}:
+    get:
+      tags:
+        - fxSpot
+      summary: get a list of FX spot for a given currency pair list and a list of date
+      operationId: getFxSpot
+      parameters:
+        - in: path
+          name: currencyPair
+          required: true
+          schema:
+            type: string
+          description: the currency pair
+          example: EUR-USD
+
+        - in: path
+          name: dateFrom
+          required: true
+          schema:
+            type: string
+            format: date
+          description: the date or the from date
+          example: 2022-01-15
+
+        - in: path
+          name: dateTo
+          required: false
+          schema:
+            type: string
+            format: date
+          description: the to date
+          example: 2023-02-17
+
+      responses:
+        '200':
+          description: FX Spot successfully updated
+          content:
+            application/valuation+json:
+              schema:
+                $ref: '#/components/schemas/FXSpotDTO'
+
+      default:
+        description: unexpected error
+        content:
+          application/problem+json:
+            schema:
+              $ref: '#/components/schemas/ProblemDTO'
+
     post:
       tags:
         - fxSpot
