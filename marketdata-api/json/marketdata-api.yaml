@@ -1,0 +1,101 @@
+
+openapi: 3.0.3
+info:
+  title: MarketData Service API
+  description: MarketData Service API
+  version: 1.0.0
+servers:
+  - url: "[[${env.marketdata-service-url}]]"
+    description: XXX
+externalDocs:
+  - url: "[[${env.marketdata-service-documentation-url}]]"
+
+tags:
+  - rateCurve
+  - fxSpot
+  - fxForward
+
+
+paths:
+  /fxSpot:
+    post:
+      tags:
+        - fxSpot
+      summary: Update a FX spot for a given currency pair and a date
+      operationId: updateFxSpot
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              type: string
+              externalDocs:
+                url: 'http://generic-instrument-service/venueEligibilities.xsd'
+                description: 'This the XSD definition for FXSpot'
+        required: true
+
+      responses:
+        '200':
+          description: FX Spot successfully updated
+          content:
+            application/valuation+json:
+              schema:
+                $ref: '#/components/schemas/FXSpotDTO'
+
+        '400':
+          description: Invalid status value
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDTO'
+        default:
+          description: unexpected error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDTO'
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    FXSpotDTO:
+      type: object
+      properties:
+        curr1:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: EUR
+        curr2:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: USD
+        date:
+          type: string
+          format: date
+          example: 2022-11-25
+        value:
+          type: number
+          format: double
+          minimum: 0
+          example: 2.5
+      required:
+        - curr1
+        - curr2
+        - date
+        - value
+
+    ProblemDTO:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+
+
