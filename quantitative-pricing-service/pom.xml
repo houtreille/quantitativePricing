@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>service</artifactId>
+  <artifactId>quantitative-pricing-service</artifactId>
 
   <dependencies>
 
@@ -125,7 +125,7 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <inputSpec>${project.basedir}/../api/json/quantitative-pricing-api.yaml</inputSpec>
+              <inputSpec>${project.basedir}/../quantitative-pricing-api/json/quantitative-pricing-api.yaml</inputSpec>
               <language>spring</language>
               <apiPackage>com.eblood.finance.quantitative.option.adapters.rest.handler</apiPackage>
               <modelPackage>com.eblood.finance.quantitative.json.v1</modelPackage>
