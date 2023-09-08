@@ -13,7 +13,6 @@
 
   <name>quantitative-pricing-api</name>
 
-
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <swagger-annotations-version>1.5.22</swagger-annotations-version>
@@ -89,8 +88,6 @@
 
 
     <plugins>
-
-
       <!-- REST server generation : we execute this plugin so that we can check that the spec files are syntaxically correct at least -->
       <plugin>
         <groupId>io.swagger.codegen.v3</groupId>
@@ -103,7 +100,7 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <inputSpec>json/quantitative-pricing-api.yaml</inputSpec>
+              <inputSpec>./api/json/quantitative-pricing-api.yaml</inputSpec>
               <language>java</language>
               <library>jersey2</library>
               <configOptions>

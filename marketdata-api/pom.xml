@@ -103,7 +103,7 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <inputSpec>json/marketdata-api.yaml</inputSpec>
+              <inputSpec>./marketdata-api/json/marketdata-api.yaml</inputSpec>
               <language>java</language>
               <library>jersey2</library>
               <configOptions>
