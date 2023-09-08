@@ -103,7 +103,7 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <inputSpec>json/quantitative-pricing-api.yaml</inputSpec>
+              <inputSpec>json/marketdata-api.yaml</inputSpec>
               <language>java</language>
               <library>jersey2</library>
               <configOptions>

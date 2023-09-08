@@ -10,8 +10,9 @@
   <packaging>pom</packaging>
   <modules>
     <module>api</module>
+    <module>marketdata-api</module>
     <module>service</module>
-    <module>marketedata-service</module>
+    <module>marketdata-service</module>
   </modules>
 
   <properties>
