@@ -1,0 +1,27 @@
+version: '2'
+services:
+  quantitative-pricing-service:
+    container_name: quantitative-pricing-service
+    build:
+      context: quantitative-pricing-service
+      dockerfile: Dockerfile
+    image: quantitative-pricing-service:latest
+    ports:
+      - 18666:8080
+    networks:
+      - spring-cloud-network
+
+  marketdata-service:
+    container_name: marketdata-service
+    build:
+      context: marketdata-service
+      dockerfile: Dockerfile
+    image: marketdata-service:latest
+    ports:
+      - 18667:8081
+    networks:
+      - spring-cloud-network
+
+networks:
+  spring-cloud-network:
+    driver: bridge
