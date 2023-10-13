@@ -22,6 +22,17 @@ services:
     networks:
       - spring-cloud-network
 
+  health-service:
+    container_name: health-service
+    build:
+      context: health-service
+      dockerfile: Dockerfile
+    image: health-service:latest
+    ports:
+      - 18668:8090
+    networks:
+      - spring-cloud-network
+
 networks:
   spring-cloud-network:
     driver: bridge
