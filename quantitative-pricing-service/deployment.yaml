@@ -1,0 +1,32 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: quantitative-pricing-service
+spec:
+  selector:
+    app: quantitative-pricing-service
+  ports:
+    - protocol: TCP
+      port: 8080
+      nodePort: 30002
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quantitative-pricing-service
+spec:
+  selector:
+    matchLabels:
+      app: quantitative-pricing-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: quantitative-pricing-service
+    spec:
+      containers:
+        - name: quantitative-pricing-service
+          image: mhoutreille/quantitative-pricing-service:latest
+          ports:
+            - containerPort: 8080

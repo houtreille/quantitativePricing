@@ -1,0 +1,32 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: health-service
+spec:
+  selector:
+    app: health-service
+  ports:
+    - protocol: TCP
+      port: 8090
+      nodePort: 30001
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-service
+spec:
+  selector:
+    matchLabels:
+      app: health-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: health-service
+    spec:
+      containers:
+        - name: health-service
+          image: mhoutreille/health-service:latest
+          ports:
+            - containerPort: 8090

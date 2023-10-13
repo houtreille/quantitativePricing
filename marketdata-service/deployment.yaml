@@ -1,0 +1,32 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: marketdata-service
+spec:
+  selector:
+    app: marketdata-service
+  ports:
+    - protocol: TCP
+      port: 8081
+      nodePort: 30003
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: marketdata-service
+spec:
+  selector:
+    matchLabels:
+      app: marketdata-service
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: marketdata-service
+    spec:
+      containers:
+        - name: marketdata-service
+          image: mhoutreille/marketdata-service:latest
+          ports:
+            - containerPort: 8081
