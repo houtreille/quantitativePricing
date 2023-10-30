@@ -12,8 +12,18 @@ externalDocs:
 
 tags:
   - VanillaFXOptionPricing
+  - Test
 
 paths:
+  /test:
+    get:
+      tags:
+        - Test
+      summary: Test
+      description: Test
+      operationId: getTest
+
+
   /option/fx/vanilla:
     post:
       tags:

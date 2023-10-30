@@ -1,2 +1,6 @@
 server:
   port: 8080
+
+rest:
+  marketdata:
+    url: http://localhost:8081

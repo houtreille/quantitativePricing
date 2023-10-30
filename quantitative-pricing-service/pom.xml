@@ -17,6 +17,16 @@
     <jackson-version>2.9.5</jackson-version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+
+    <maven-jaxb2-plugin.version>0.14.0</maven-jaxb2-plugin.version>
+    <jaxb2-basics.version>1.11.1</jaxb2-basics.version>
+    <jaxb2-basics-runtime.version>1.11.1</jaxb2-basics-runtime.version>
+    <jaxb-core.version>2.3.0.1</jaxb-core.version>
+    <jaxb-api.version>2.3.1</jaxb-api.version>
+
+    <jersey.version>2.33</jersey.version>
+
+    <jackson-databind-nullable-version>0.2.0</jackson-databind-nullable-version>
   </properties>
 
   <parent>
@@ -116,6 +126,7 @@
       <scope>provided</scope>
     </dependency>
 
+
   </dependencies>
 
   <build>
@@ -148,7 +159,7 @@
         <version>3.0.27</version>
         <executions>
           <execution>
-            <id>v1</id>
+            <id>quantitative-pricing-v1</id>
             <goals>
               <goal>generate</goal>
             </goals>
@@ -163,6 +174,51 @@
                 <interfaceOnly>true</interfaceOnly>
                 <dateLibrary>java8</dateLibrary>
                 <!--<sourceFolder>src/gen/java/main</sourceFolder>-->
+              </configOptions>
+            </configuration>
+          </execution>
+
+          <!-- Market Data-->
+          <!--execution>
+            <id>marketdata-v1</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/../marketdata-api/json/marketdata-api.yaml</inputSpec>
+              <language>spring</language>
+              <apiPackage>com.eblood.finance.quantitative.marketdata.adapters.rest.handler</apiPackage>
+              <modelPackage>com.eblood.finance.quantitative.json.v1</modelPackage>
+              <invokerPackage>com.eblood.finance.quantitative.option.adapters.rest.handler</invokerPackage>
+              <generateApiTests>false</generateApiTests>
+              <configOptions>
+                <interfaceOnly>true</interfaceOnly>
+                <dateLibrary>java8</dateLibrary>
+              </configOptions>
+            </configuration>
+          </execution-->
+
+
+          <execution>
+            <id>marketdata-v1-client</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/../marketdata-api/json/marketdata-api.yaml</inputSpec>
+              <language>java</language>
+              <library>resttemplate</library>
+              <modelPackage>com.eblood.finance.quantitative.marketdata.v1</modelPackage>
+              <apiPackage>com.eblood.finance.quantitative.marketdata.client</apiPackage>
+              <generateApis>true</generateApis>
+              <generateApiDocumentation>false</generateApiDocumentation>
+              <generateApiTests>false</generateApiTests>
+              <generateModels>true</generateModels>
+              <generateModelDocumentation>false</generateModelDocumentation>
+              <generateModelTests>false</generateModelTests>
+              <configOptions>
+                <useTags>true</useTags>
+                <dateLibrary>java8-localdatetime</dateLibrary>
               </configOptions>
             </configuration>
           </execution>
