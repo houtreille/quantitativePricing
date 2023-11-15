@@ -52,7 +52,7 @@ paths:
 
       responses:
         '200':
-          description: FX Spot successfully updated
+          description: FX Spot successfully retrieved
           content:
             application/valuation+json:
               schema:
@@ -65,6 +65,41 @@ paths:
             schema:
               $ref: '#/components/schemas/ProblemDTO'
 
+  /fxSpot/search:
+    post:
+      tags:
+        - fxSpot
+      summary: Search a List of FX spot for a given criteria
+      operationId: searchFxSpots
+      requestBody:
+        content:
+          application/vnd.ams.fxSpot-search-api+json:
+            schema:
+              $ref: '#/components/schemas/FXSportSearchDTO'
+        required: true
+      responses:
+        '200':
+          description: Successfully returned a list with cds curves matching search criteria
+          content:
+            application/vnd.ams.cds-curve-search-api.v2+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FXSpotDTO'
+        '400':
+          description: Invalid status value
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDTO'
+        default:
+          description: unexpected error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDTO'
+
+  /fxSpot:
     post:
       tags:
         - fxSpot
@@ -72,13 +107,11 @@ paths:
       operationId: updateFxSpot
       requestBody:
         content:
-          application/xml:
+          application/vnd.ams.fxSpot-search-api+json:
             schema:
-              type: string
-              externalDocs:
-                url: 'http://generic-instrument-service/venueEligibilities.xsd'
-                description: 'This the XSD definition for FXSpot'
-        required: true
+              type: array
+              items:
+                $ref: '#/components/schemas/FXSpotDTO'
 
       responses:
         '200':
@@ -86,7 +119,9 @@ paths:
           content:
             application/valuation+json:
               schema:
-                $ref: '#/components/schemas/FXSpotDTO'
+                type: array
+                items:
+                  $ref: '#/components/schemas/FXSpotDTO'
 
         '400':
           description: Invalid status value
@@ -100,6 +135,21 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/ProblemDTO'
+
+    get:
+      tags:
+        -fxSpot
+      summary: get all fxSpots
+      operationId: getAllFxSpots
+      responses:
+        '200':
+          description: FX Spot successfully retrieved
+          content:
+            application/valuation+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FXSpotDTO'
 
 components:
   securitySchemes:
@@ -136,6 +186,27 @@ components:
         - curr2
         - date
         - value
+
+    FXSportSearchDTO:
+      type: object
+      properties:
+        curr1:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: EUR
+        curr2:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: USD
+        date:
+          type: string
+          format: date
+          example: 2022-11-25
+        required:
+          - curr1
+          - curr2
 
     ProblemDTO:
       type: object
