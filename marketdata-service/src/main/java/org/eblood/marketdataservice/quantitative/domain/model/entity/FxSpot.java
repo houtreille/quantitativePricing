@@ -18,6 +18,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class FxSpot {
     @Id
     @Column(name = "KEY_ID", nullable = false)
@@ -36,44 +37,15 @@ public class FxSpot {
     @Column(name = "VALUE")
     Double value;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "HIGH")
+    Double high;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "LOW")
+    Double low;
 
-    public String getDomesticCurr() {
-        return domesticCurr;
-    }
+    @Column(name = "VOLUME")
+    Double volume;
 
-    public void setDomesticCurr(String domesticCurr) {
-        this.domesticCurr = domesticCurr;
-    }
-
-    public String getForeignCurr() {
-        return foreignCurr;
-    }
-
-    public void setForeignCurr(String foreignCurr) {
-        this.foreignCurr = foreignCurr;
-    }
-
-    public LocalDate getValueDate() {
-        return valueDate;
-    }
-
-    public void setValueDate(LocalDate valueDate) {
-        this.valueDate = valueDate;
-    }
-
-    public Double getValue() {
-        return value;
-    }
-
-    public void setValue(Double value) {
-        this.value = value;
-    }
-
+    @Column(name = "EXCHANGE_NAME")
+    String exchangeName;
 }

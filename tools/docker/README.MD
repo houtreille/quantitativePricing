@@ -55,8 +55,9 @@ docker-compose up --build
 
  First install [https://minikube.sigs.k8s.io/docs/start/](Minikube)
 
- launch 
+ launch minikube
  ```bash
+minikube start 
 minikube dashboard
 ```
 

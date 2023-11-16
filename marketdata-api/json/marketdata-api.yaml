@@ -75,11 +75,60 @@ paths:
         content:
           application/vnd.ams.fxSpot-search-api+json:
             schema:
-              $ref: '#/components/schemas/FXSportSearchDTO'
+              $ref: '#/components/schemas/FXSpotSearchDTO'
         required: true
       responses:
         '200':
-          description: Successfully returned a list with cds curves matching search criteria
+          description: Successfully returned a list with fxSpots matching search criteria
+          content:
+            application/vnd.ams.cds-curve-search-api.v2+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FXSpotDTO'
+        '400':
+          description: Invalid status value
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDTO'
+        default:
+          description: unexpected error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDTO'
+  /fxSpot/synchronize:
+    post:
+      tags:
+        - fxSpot
+      summary: Synchronize fx spots from XXX for a given criteria
+      operationId: synchronizeFxSpots
+      requestBody:
+        content:
+          application/vnd.ams.fxSpot-synchronize-api+json:
+            schema:
+              $ref: '#/components/schemas/FXSpotSynchronizeDTO'
+        required: true
+      parameters:
+        - in: query
+          name: provider
+          description: where to search for fxSpots
+          example: 'BBG'
+          schema:
+            type: string
+            enum:
+              - BBG
+              - Binance
+        - in: query
+          name: publish
+          description: whether to publish the fxSpots
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Grabbing fxSpots from XXX a list with cds curves matching search criteria
           content:
             application/vnd.ams.cds-curve-search-api.v2+json:
               schema:
@@ -187,7 +236,7 @@ components:
         - date
         - value
 
-    FXSportSearchDTO:
+    FXSpotSearchDTO:
       type: object
       properties:
         curr1:
@@ -207,6 +256,28 @@ components:
         required:
           - curr1
           - curr2
+
+    FXSpotSynchronizeDTO:
+      type: object
+      properties:
+        curr1:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: EUR
+        curr2:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: USD
+        date:
+          type: string
+          format: date
+          example: 2022-11-25
+        required:
+          - curr1
+          - curr2
+          - date
 
     ProblemDTO:
       type: object

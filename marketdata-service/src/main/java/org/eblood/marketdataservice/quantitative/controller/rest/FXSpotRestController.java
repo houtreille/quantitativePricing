@@ -1,7 +1,8 @@
 package org.eblood.marketdataservice.quantitative.controller.rest;
 
-import com.eblood.finance.quantitative.json.v1.FXSportSearchDTO;
+import com.eblood.finance.quantitative.json.v1.FXSpotSearchDTO;
 import com.eblood.finance.quantitative.json.v1.FXSpotDTO;
+import com.eblood.finance.quantitative.json.v1.FXSpotSynchronizeDTO;
 import com.eblood.finance.quantitative.marketdata.adapters.rest.handler.FxSpotApi;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -14,6 +15,7 @@ import org.eblood.marketdataservice.quantitative.domain.model.entity.FxSpot;
 import org.eblood.marketdataservice.quantitative.domain.model.repository.FxSpotRepository;
 import org.eblood.marketdataservice.quantitative.mapper.json.JsonMapper;
 import org.eblood.marketdataservice.quantitative.service.FxSpotService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,15 +24,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class FXSpotRestController implements FxSpotApi {
 
 
-  private final FxSpotService service;
-  private final JsonMapper jsonMapper;
+    private final FxSpotService service;
+    private final JsonMapper jsonMapper;
     private final FxSpotRepository fxSpotRepository;
+    private final RabbitTemplate rabbitTemplate;
 
-    public FXSpotRestController(FxSpotService service, JsonMapper jsonMapper,
-                                FxSpotRepository fxSpotRepository) {
-    this.service = service;
-    this.jsonMapper = jsonMapper;
+    public FXSpotRestController(FxSpotService service,
+                                JsonMapper jsonMapper,
+                                FxSpotRepository fxSpotRepository,
+                                RabbitTemplate rabbitTemplate) {
+        this.service = service;
+        this.jsonMapper = jsonMapper;
         this.fxSpotRepository = fxSpotRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
 
@@ -51,7 +57,7 @@ public class FXSpotRestController implements FxSpotApi {
   }
 
     @Override
-    public ResponseEntity<List<FXSpotDTO>> searchFxSpots(FXSportSearchDTO body) {
+    public ResponseEntity<List<FXSpotDTO>> searchFxSpots(FXSpotSearchDTO body) {
 
         if(body.getDate() == null) {
             return service.findFxSpotByDomesticCurrAndForeignCurr(body.getCurr1(), body.getCurr2())
@@ -61,6 +67,12 @@ public class FXSpotRestController implements FxSpotApi {
         } else {
             return ResponseEntity.ok(Collections.singletonList(jsonMapper.map(service.getFxSpotByDomesticCurrAndForeignCurrAndValueDate(body.getCurr1(), body.getCurr2(), body.getDate()))));
         }
+    }
+
+    @Override
+    public ResponseEntity<List<FXSpotDTO>> synchronizeFxSpots(FXSpotSynchronizeDTO body, String provider, Boolean publish) {
+        service.sendSynchronizeRequest();
+        return null;
     }
 
 
