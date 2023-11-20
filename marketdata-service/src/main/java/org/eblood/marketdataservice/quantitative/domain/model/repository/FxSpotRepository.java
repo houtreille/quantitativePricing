@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FxSpotRepository extends JpaRepository<FxSpot, Long> {
@@ -15,6 +16,12 @@ public interface FxSpotRepository extends JpaRepository<FxSpot, Long> {
    List<FxSpot> findFxSpotByDomesticCurrAndForeignCurr(String domesticCurr, String foreignCurr);
 
    FxSpot getFxSpotByDomesticCurrAndForeignCurrAndValueDate(String domesticCurr, String foreignCurr, LocalDate valueDate);
+
+
+   FxSpot findFirstByDomesticCurrAndForeignCurrOrderByValueDateDesc(String domesticCurr, String foreignCurr);
+
+  // FxSpot findFirstByValueDateAndDomesticCurrAndForeignCurr(String domesticCurr, String foreignCurr);
+
    @Override
    FxSpot save(FxSpot fxSpot);
 

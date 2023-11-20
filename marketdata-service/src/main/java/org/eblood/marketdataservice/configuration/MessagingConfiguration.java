@@ -23,6 +23,7 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.messaging.converter.ProtobufMessageConverter;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
@@ -59,13 +60,13 @@ public class MessagingConfiguration {
     this.messagingProperties = messagingProperties;
   }*/
 
-/*  @Bean
+  @Bean
   public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory,
       ObjectMapper jsonObjectMapper) {
     RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
     rabbitTemplate.setMessageConverter(contentTypeDelegatingMessageConverter(jsonObjectMapper));
     return rabbitTemplate;
-  }*/
+  }
 
    /* @Bean
     public Queue inputUniverseQueue() {
@@ -85,6 +86,15 @@ public class MessagingConfiguration {
   @Bean
   public Queue myQueue() {
     return new Queue("myQueue", false);
+  }
+
+  @Bean
+  public MessageConverter contentTypeDelegatingMessageConverter(ObjectMapper jsonObjectMapper) {
+    ContentTypeDelegatingMessageConverter converter = new ContentTypeDelegatingMessageConverter();
+    converter.addDelegate(MessageProperties.CONTENT_TYPE_JSON, new Jackson2JsonMessageConverter(jsonObjectMapper));
+    //converter.addDelegate(CONTENT_TYPE_PB, new ProtobufMessageConverter());
+    //converter.addDelegate(MessageProperties.CONTENT_TYPE_XML, new JaxbMessageConverter());
+    return converter;
   }
 
 /*

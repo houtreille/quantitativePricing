@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.eblood.marketdataservice.quantitative.domain.model.entity.FxSpot;
 import org.eblood.marketdataservice.quantitative.domain.model.repository.FxSpotRepository;
 import org.eblood.marketdataservice.quantitative.mapper.json.JsonMapper;
+import org.eblood.marketdataservice.quantitative.messaging.model.FXSynchronizeRequest;
 import org.eblood.marketdataservice.quantitative.service.FxSpotService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -71,7 +72,14 @@ public class FXSpotRestController implements FxSpotApi {
 
     @Override
     public ResponseEntity<List<FXSpotDTO>> synchronizeFxSpots(FXSpotSynchronizeDTO body, String provider, Boolean publish) {
-        service.sendSynchronizeRequest();
+
+        FXSynchronizeRequest request = FXSynchronizeRequest.builder()
+                        .currencyPair(body.getCurr1() + body.getCurr2())
+                        .type(body.getDate() == null ? FXSynchronizeRequest.FULL_HISTORY : FXSynchronizeRequest.MISSING_HISTORY)
+                        .provider(FXSynchronizeRequest.YAHOO_PROVIDER)
+                        .build();
+
+        service.sendSynchronizeRequest(request);
         return null;
     }
 

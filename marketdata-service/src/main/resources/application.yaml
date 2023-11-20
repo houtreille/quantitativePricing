@@ -14,6 +14,18 @@ spring:
     username: marketdata_service_user
     password: marketdata_service_pwd123
 
+
+  #rabbitmq:
+    # host: localhost
+    #port: 5672
+    #username: marketdata
+    #password: password
+    #virtual-host: eblood.marketdata.dev.vhost
+      #listener:
+      #simple:
+      # acknowledge-mode: auto
+    #cd   default-requeue-rejected: false
+
   jpa:
     properties:
       hibernate:
@@ -32,3 +44,6 @@ spring:
     enabled: true
     table: flyway_schema_history
     clean-on-validation-error: true
+logging:
+  level:
+   org.eblood.marketdataservice: DEBUG
