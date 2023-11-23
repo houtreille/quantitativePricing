@@ -47,3 +47,17 @@ spring:
 logging:
   level:
    org.eblood.marketdataservice: DEBUG
+
+messaging:
+  fxSpotHistoryRequestExchange:
+    name: fx.spot.history.request.exchange
+    queue:
+        name: historyRequest.q
+        contentType: application/json
+        dataset: fxSpot
+  fxVolatilityHistoryRequestExchange:
+    name: fx.volatility.history.request.exchange
+    queue:
+      name: historyRequest.q
+      contentType: application/json
+      dataset: fxVolatility

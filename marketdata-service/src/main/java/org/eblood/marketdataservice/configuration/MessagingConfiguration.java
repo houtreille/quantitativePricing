@@ -54,11 +54,11 @@ public class MessagingConfiguration {
   private static final String X_DEAD_LETTER_EXCHANGE = "x-dead-letter-exchange";
   private static final String X_DEAD_LETTER_ROUTING_KEY = "x-dead-letter-routing-key";
 
-/*  private final MessagingProperties messagingProperties;
+  private final MessagingProperties messagingProperties;
 
   public MessagingConfiguration(MessagingProperties messagingProperties) {
     this.messagingProperties = messagingProperties;
-  }*/
+  }
 
   @Bean
   public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory,
@@ -68,49 +68,76 @@ public class MessagingConfiguration {
     return rabbitTemplate;
   }
 
-   /* @Bean
-    public Queue inputUniverseQueue() {
-        return new Queue(
-            "marketdata",
+  @Bean
+  public Queue fxSpotHistoryRequestQueue() {
+    return new Queue(
+            messagingProperties.getFxSpotHistoryRequestExchange().getQueue().getName(),
             true,
             false,
             false,
             Map.ofEntries(
-                entry(X_MAX_LENGTH, 100000),
-                entry(X_QUEUE_MODE, "lazy"),
-                entry(X_MESSAGE_TTL, 60000)
+                    entry(X_MESSAGE_TTL, 43200000),   // TTL = 12H
+                    entry(X_QUEUE_MODE, "lazy")
             )
-        );
-    }*/
+    );
+  }
 
   @Bean
-  public Queue myQueue() {
-    return new Queue("myQueue", false);
+  public Queue fxVolatilityHistoryRequestQueue() {
+    return new Queue(
+            messagingProperties.getFxSpotHistoryRequestExchange().getQueue().getName(),
+            true,
+            false,
+            false,
+            Map.ofEntries(
+                    entry(X_MESSAGE_TTL, 43200000),   // TTL = 12H
+                    entry(X_QUEUE_MODE, "lazy")
+            )
+    );
+  }
+
+
+  @Bean
+  public Binding bindingFxSpotExchange() {
+    return BindingBuilder
+            .bind(fxSpotHistoryRequestQueue())
+            .to(fxSpotHistoryRequestExchange())
+            .whereAll(Map.of(
+                    CONTENT_TYPE_HEADER,
+                    messagingProperties.getFxSpotHistoryRequestExchange().getQueue().getContentType(),
+                    DATASET_HEADER,
+                    messagingProperties.getFxSpotHistoryRequestExchange().getQueue().getDataset()))
+            .match();
+  }
+
+  @Bean
+  public Binding bindingFxVolatilityExchange() {
+    return BindingBuilder
+            .bind(fxVolatilityHistoryRequestQueue())
+            .to(fxVolatilityHistoryRequestExchange())
+            .whereAll(Map.of(
+                    CONTENT_TYPE_HEADER,
+                    messagingProperties.getFxVolatilityHistoryRequestExchange().getQueue().getContentType(),
+                    DATASET_HEADER,
+                    messagingProperties.getFxVolatilityHistoryRequestExchange().getQueue().getDataset()))
+            .match();
+  }
+  @Bean
+  public HeadersExchange fxSpotHistoryRequestExchange() {
+    return new HeadersExchange(messagingProperties.getFxSpotHistoryRequestExchange().getName());
+  }
+
+  @Bean
+  public HeadersExchange fxVolatilityHistoryRequestExchange() {
+    return new HeadersExchange(messagingProperties.getFxVolatilityHistoryRequestExchange().getName());
   }
 
   @Bean
   public MessageConverter contentTypeDelegatingMessageConverter(ObjectMapper jsonObjectMapper) {
     ContentTypeDelegatingMessageConverter converter = new ContentTypeDelegatingMessageConverter();
     converter.addDelegate(MessageProperties.CONTENT_TYPE_JSON, new Jackson2JsonMessageConverter(jsonObjectMapper));
-    //converter.addDelegate(CONTENT_TYPE_PB, new ProtobufMessageConverter());
-    //converter.addDelegate(MessageProperties.CONTENT_TYPE_XML, new JaxbMessageConverter());
     return converter;
   }
-
-/*
-    @Bean
-    public Binding bindingInputUniverseQueueToInputExchange() {
-        return BindingBuilder
-            .bind(inputUniverseQueue())
-            .to(inputExchange())
-            .whereAll(Map.of(
-            CONTENT_TYPE_HEADER,
-            messagingProperties.getInputExchange().getQueues().getUniverse().getContentType(),
-            DATASET_HEADER,
-            messagingProperties.getInputExchange().getQueues().getUniverse().getDataset()))
-            .match();
-    }
-*/
 
 
 }

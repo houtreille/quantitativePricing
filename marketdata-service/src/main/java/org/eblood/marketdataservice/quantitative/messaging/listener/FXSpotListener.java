@@ -2,6 +2,7 @@ package org.eblood.marketdataservice.quantitative.messaging.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.eblood.marketdataservice.configuration.MessagingProperties;
 import org.eblood.marketdataservice.quantitative.domain.model.entity.FxSpot;
 import org.eblood.marketdataservice.quantitative.messaging.model.FXSynchronizeRequest;
 import org.eblood.marketdataservice.quantitative.service.FxSpotService;
@@ -25,8 +26,11 @@ public class FXSpotListener {
     @Autowired
     FxSpotService fxSpotService;
 
+    @Autowired
+    MessagingProperties messagingProperties;
 
-    @RabbitListener(queues = "myQueue")
+
+    @RabbitListener(queues = {"#{messagingProperties.fxSpotHistoryRequestExchange.queue.name}"})
     public void listen(Message in)  {
 
         String contentType = in.getMessageProperties().getContentType();
@@ -44,7 +48,7 @@ public class FXSpotListener {
             }
 
             if(logger.isDebugEnabled()) {
-                logger.debug("Message read from myQueue : " + in);
+                logger.debug(String.format("Message read from %s : %s", messagingProperties.getFxSpotHistoryRequestExchange().getQueue().getName(), in));
             }
         } else {
             logger.error("Message is not JSON");

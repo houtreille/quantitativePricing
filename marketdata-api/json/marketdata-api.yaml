@@ -14,6 +14,7 @@ tags:
   - rateCurve
   - fxSpot
   - fxForward
+  - fxVolatility
 
 
 paths:
@@ -130,7 +131,7 @@ paths:
         '200':
           description: Grabbing fxSpots from XXX a list with cds curves matching search criteria
           content:
-            application/vnd.ams.cds-curve-search-api.v2+json:
+            application/vnd.ams.fxspot-search-api.v2+json:
               schema:
                 type: array
                 items:
@@ -147,7 +148,6 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/ProblemDTO'
-
   /fxSpot:
     post:
       tags:
@@ -199,6 +199,57 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/FXSpotDTO'
+
+  /fxVolatility/synchronize:
+    post:
+      tags:
+        - fxVolatility
+      summary: Synchronize volatility spots from XXX for a given criteria
+      operationId: synchronizeFxVolatility
+      requestBody:
+        content:
+          application/vnd.ams.fxVolatility-synchronize-api+json:
+            schema:
+              $ref: '#/components/schemas/FXSpotSynchronizeDTO'
+        required: true
+      parameters:
+        - in: query
+          name: provider
+          description: where to search for fxVolatility
+          example: 'BBG'
+          schema:
+            type: string
+            enum:
+              - BBG
+              - Binance
+        - in: query
+          name: publish
+          description: whether to publish the fxVolatility
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Grabbing fxVolatility from XXX
+          content:
+            application/vnd.ams.fxVolatility-search-api.v2+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FXSpotDTO'
+        '400':
+          description: Invalid status value
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDTO'
+        default:
+          description: unexpected error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDTO'
+
 
 components:
   securitySchemes:
