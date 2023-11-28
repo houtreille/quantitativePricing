@@ -23,9 +23,9 @@ public class FXVolatilitytListener {
     MessagingProperties messagingProperties;
 
 
-    @RabbitListener(queues = {"#{messagingProperties.fxVolatilityHistoryRequestExchange.queue.name}"})
+    @RabbitListener(queues = {"#{messagingProperties.fxExchange.volatilityQueue.name}"})
     public void listen(Message in)  {
-        logger.debug(String.format("Message read from %s : %s", messagingProperties.getFxVolatilityHistoryRequestExchange().getQueue().getName(), in));
+        logger.debug(String.format("Message read from %s : %s", messagingProperties.getFxExchange().getVolatilityQueue().getName(), in));
     }
 
 }

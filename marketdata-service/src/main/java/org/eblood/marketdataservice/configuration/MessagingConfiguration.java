@@ -11,9 +11,11 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Declarables;
 import org.springframework.amqp.core.HeadersExchange;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -68,10 +70,15 @@ public class MessagingConfiguration {
     return rabbitTemplate;
   }
 
+  /**
+   * Queues
+   *
+   */
+
   @Bean
   public Queue fxSpotHistoryRequestQueue() {
     return new Queue(
-            messagingProperties.getFxSpotHistoryRequestExchange().getQueue().getName(),
+            messagingProperties.getFxExchange().getSpotQueue().getName(),
             true,
             false,
             false,
@@ -85,7 +92,35 @@ public class MessagingConfiguration {
   @Bean
   public Queue fxVolatilityHistoryRequestQueue() {
     return new Queue(
-            messagingProperties.getFxSpotHistoryRequestExchange().getQueue().getName(),
+            messagingProperties.getFxExchange().getVolatilityQueue().getName(),
+            true,
+            false,
+            false,
+            Map.ofEntries(
+                    entry(X_MESSAGE_TTL, 43200000),   // TTL = 12H
+                    entry(X_QUEUE_MODE, "lazy")
+            )
+    );
+  }
+
+  @Bean
+  public Queue test1Queue() {
+    return new Queue(
+            messagingProperties.getTopicExchange().getTestQueue1().getName(),
+            true,
+            false,
+            false,
+            Map.ofEntries(
+                    entry(X_MESSAGE_TTL, 43200000),   // TTL = 12H
+                    entry(X_QUEUE_MODE, "lazy")
+            )
+    );
+  }
+
+  @Bean
+  public Queue test2Queue() {
+    return new Queue(
+            messagingProperties.getTopicExchange().getTestQueue2().getName(),
             true,
             false,
             false,
@@ -97,16 +132,21 @@ public class MessagingConfiguration {
   }
 
 
+  /**
+   * Bindings
+   *
+   */
+
   @Bean
   public Binding bindingFxSpotExchange() {
     return BindingBuilder
             .bind(fxSpotHistoryRequestQueue())
-            .to(fxSpotHistoryRequestExchange())
+            .to(fxRequestExchange())
             .whereAll(Map.of(
                     CONTENT_TYPE_HEADER,
-                    messagingProperties.getFxSpotHistoryRequestExchange().getQueue().getContentType(),
+                    messagingProperties.getFxExchange().getSpotQueue().getContentType(),
                     DATASET_HEADER,
-                    messagingProperties.getFxSpotHistoryRequestExchange().getQueue().getDataset()))
+                    messagingProperties.getFxExchange().getSpotQueue().getDataset()))
             .match();
   }
 
@@ -114,23 +154,54 @@ public class MessagingConfiguration {
   public Binding bindingFxVolatilityExchange() {
     return BindingBuilder
             .bind(fxVolatilityHistoryRequestQueue())
-            .to(fxVolatilityHistoryRequestExchange())
+            .to(fxRequestExchange())
             .whereAll(Map.of(
                     CONTENT_TYPE_HEADER,
-                    messagingProperties.getFxVolatilityHistoryRequestExchange().getQueue().getContentType(),
+                    messagingProperties.getFxExchange().getVolatilityQueue().getContentType(),
                     DATASET_HEADER,
-                    messagingProperties.getFxVolatilityHistoryRequestExchange().getQueue().getDataset()))
+                    messagingProperties.getFxExchange().getVolatilityQueue().getDataset()))
             .match();
-  }
-  @Bean
-  public HeadersExchange fxSpotHistoryRequestExchange() {
-    return new HeadersExchange(messagingProperties.getFxSpotHistoryRequestExchange().getName());
   }
 
   @Bean
-  public HeadersExchange fxVolatilityHistoryRequestExchange() {
-    return new HeadersExchange(messagingProperties.getFxVolatilityHistoryRequestExchange().getName());
+  public Binding bindingTopic1() {
+    return BindingBuilder
+            .bind(test1Queue())
+            .to(topicExchange())
+            .with(messagingProperties.getTopicExchange().getTestQueue1().getKeyPatterns());
+
   }
+
+  @Bean
+  public Declarables topicBindings() {
+
+    return new Declarables(
+            BindingBuilder
+                    .bind(test1Queue())
+                    .to(topicExchange())
+                    .with(messagingProperties.getTopicExchange().getTestQueue1().getKeyPatterns()),
+            BindingBuilder
+                    .bind(test2Queue())
+                    .to(topicExchange())
+                    .with(messagingProperties.getTopicExchange().getTestQueue2().getKeyPatterns()));
+  }
+
+
+  /**
+    EXCHANGES
+   */
+
+  @Bean
+  public HeadersExchange fxRequestExchange() {
+    return new HeadersExchange(messagingProperties.getFxExchange().getName());
+  }
+
+
+  @Bean
+  public TopicExchange topicExchange() {
+    return new TopicExchange(messagingProperties.getTopicExchange().getName());
+  }
+
 
   @Bean
   public MessageConverter contentTypeDelegatingMessageConverter(ObjectMapper jsonObjectMapper) {

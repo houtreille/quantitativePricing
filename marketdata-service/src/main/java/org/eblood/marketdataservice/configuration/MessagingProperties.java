@@ -1,5 +1,6 @@
 package org.eblood.marketdataservice.configuration;
 
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -8,30 +9,67 @@ import org.springframework.stereotype.Component;
 public class MessagingProperties {
 
 
-    Exchange fxSpotHistoryRequestExchange = new Exchange();
+    FXExchange fxExchange = new FXExchange();
 
-    Exchange fxVolatilityHistoryRequestExchange = new Exchange();
-    public Exchange getFxSpotHistoryRequestExchange() {
-        return fxSpotHistoryRequestExchange;
+    TopicExchange topicExchange = new TopicExchange();
+
+    public FXExchange getFxExchange() {
+        return fxExchange;
     }
 
-    public void setFxSpotHistoryRequestExchange(Exchange fxSpotHistoryRequestExchange) {
-        this.fxSpotHistoryRequestExchange = fxSpotHistoryRequestExchange;
-    }
-    public Exchange getFxVolatilityHistoryRequestExchange() {
-        return fxVolatilityHistoryRequestExchange;
+    public void setFxExchange(FXExchange fxSpotHistoryRequestExchange) {
+        this.fxExchange = fxSpotHistoryRequestExchange;
     }
 
-    public void setFxVolatilityHistoryRequestExchange(Exchange fxVolatilityHistoryRequestExchange) {
-        this.fxVolatilityHistoryRequestExchange = fxVolatilityHistoryRequestExchange;
+    public TopicExchange getTopicExchange() {
+        return topicExchange;
+    }
+
+    public void setTopicExchange(TopicExchange topicExchange) {
+        this.topicExchange = topicExchange;
     }
 
 
-    public static class Exchange {
+    public static class FXExchange {
 
         private String name;
 
-        private Queue queue;
+        private Queue spotQueue;
+
+        private Queue volatilityQueue;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+        public Queue getSpotQueue() {
+            return spotQueue;
+        }
+
+        public void setSpotQueue(Queue spotQueue) {
+            this.spotQueue = spotQueue;
+        }
+
+        public Queue getVolatilityQueue() {
+            return volatilityQueue;
+        }
+
+        public void setVolatilityQueue(Queue volatilityQueue) {
+            this.volatilityQueue = volatilityQueue;
+        }
+    }
+
+    public static class TopicExchange {
+
+
+        private String name;
+
+        private TopicQueue testQueue1;
+
+        private TopicQueue testQueue2;
 
         public String getName() {
             return name;
@@ -41,12 +79,20 @@ public class MessagingProperties {
             this.name = name;
         }
 
-        public Queue getQueue() {
-            return queue;
+        public TopicQueue getTestQueue1() {
+            return testQueue1;
         }
 
-        public void setQueue(Queue queue) {
-            this.queue = queue;
+        public void setTestQueue1(TopicQueue testQueue1) {
+            this.testQueue1 = testQueue1;
+        }
+
+        public TopicQueue getTestQueue2() {
+            return testQueue2;
+        }
+
+        public void setTestQueue2(TopicQueue testQueue2) {
+            this.testQueue2 = testQueue2;
         }
     }
 
@@ -80,6 +126,27 @@ public class MessagingProperties {
         public void setDataset(String dataset) {
             this.dataset = dataset;
         }
+    }
+
+    public static class TopicQueue {
+        private String name;
+        private String keyPatterns;
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getKeyPatterns() {
+            return keyPatterns;
+        }
+
+        public void setKeyPatterns(String keyPatterns) {
+            this.keyPatterns = keyPatterns;
+        }
+
     }
 
 }

@@ -19,25 +19,21 @@ import org.eblood.marketdataservice.quantitative.service.FxSpotService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class FXSpotRestController implements FxSpotApi {
 
 
     private final FxSpotService service;
     private final JsonMapper jsonMapper;
-    private final FxSpotRepository fxSpotRepository;
-    private final RabbitTemplate rabbitTemplate;
 
     public FXSpotRestController(FxSpotService service,
-                                JsonMapper jsonMapper,
-                                FxSpotRepository fxSpotRepository,
-                                RabbitTemplate rabbitTemplate) {
+                                JsonMapper jsonMapper) {
         this.service = service;
         this.jsonMapper = jsonMapper;
-        this.fxSpotRepository = fxSpotRepository;
-        this.rabbitTemplate = rabbitTemplate;
     }
 
 
@@ -108,13 +104,13 @@ public class FXSpotRestController implements FxSpotApi {
          */
 
         for (FxSpot spot : spots) {
-            FxSpot existingSpot = fxSpotRepository.getFxSpotByDomesticCurrAndForeignCurrAndValueDate(spot.getDomesticCurr(),
+            FxSpot existingSpot = service.getFxSpotByDomesticCurrAndForeignCurrAndValueDate(spot.getDomesticCurr(),
                     spot.getForeignCurr(), spot.getValueDate());
             if (existingSpot != null) {
                 existingSpot.setValue(spot.getValue());
-                fxSpotRepository.save(existingSpot);
+                service.save(existingSpot);
             } else {
-                fxSpotRepository.save(spot);
+                service.save(spot);
             }
         }
 

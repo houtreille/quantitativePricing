@@ -14,32 +14,14 @@ import static org.eblood.marketdataservice.configuration.MessagingConfiguration.
 import static org.springframework.amqp.core.MessageProperties.CONTENT_TYPE_JSON;
 
 @Service
-public class FXVolatilityMessageProducer {
+public class FXVolatilityMessageProducer extends FXMessageProducer {
 
-    @Autowired
-    RabbitTemplate rabbitTemplate;
-    @Autowired
-    ObjectMapper objectMapper;
-    @Autowired
-    MessagingProperties messagingProperties;
-
-    public void sendSynchronizeRequest(FXSynchronizeRequest request) {
-        var messageProperties = getMessageProperties(request);
-
-        var converter = rabbitTemplate.getMessageConverter();
-        var message = converter.toMessage(request, messageProperties);
-
-        rabbitTemplate.send(messagingProperties.getFxVolatilityHistoryRequestExchange().getName(),  EMPTY_ROUTING_KEY, message);
+    public FXVolatilityMessageProducer(RabbitTemplate rabbitTemplate, MessagingProperties messagingProperties) {
+        super(rabbitTemplate, messagingProperties);
     }
 
-
-    private MessageProperties getMessageProperties(FXSynchronizeRequest request) {
-        var messageProperties = new MessageProperties();
-        messageProperties.setHeader("contentType", CONTENT_TYPE_JSON);
-        messageProperties.setHeader(DATASET_HEADER, Utils.FX_VOLATILITY_DATASET);
-        //This contentType is required to make the MessageConverter use the adapted converter
-        messageProperties.setContentType(CONTENT_TYPE_JSON);
-
-        return messageProperties;
+    @Override
+    protected Object getDataSet() {
+        return Utils.FX_VOLATILITY_DATASET;
     }
 }

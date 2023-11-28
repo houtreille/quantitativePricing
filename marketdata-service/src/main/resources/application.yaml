@@ -49,15 +49,23 @@ logging:
    org.eblood.marketdataservice: DEBUG
 
 messaging:
-  fxSpotHistoryRequestExchange:
-    name: fx.spot.history.request.exchange
-    queue:
-        name: historyRequest.q
+  fxExchange:
+    name: fx.history.request.exchange
+    spotQueue:
+        name: fxHistoryRequest.q
         contentType: application/json
         dataset: fxSpot
-  fxVolatilityHistoryRequestExchange:
-    name: fx.volatility.history.request.exchange
-    queue:
-      name: historyRequest.q
+    volatilityQueue:
+      name: volHistoryRequest.q
       contentType: application/json
       dataset: fxVolatility
+  topicExchange:
+    name: topic.exchangeTest
+    testQueue1:
+      name: test1.q
+      contentType: application/json
+      keyPatterns: '*.important.*'
+    testQueue2:
+      name: test2.q
+      contentType: application/json
+      keyPatterns: '#.error'

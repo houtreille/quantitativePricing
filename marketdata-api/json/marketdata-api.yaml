@@ -210,7 +210,7 @@ paths:
         content:
           application/vnd.ams.fxVolatility-synchronize-api+json:
             schema:
-              $ref: '#/components/schemas/FXSpotSynchronizeDTO'
+              $ref: '#/components/schemas/FXVolatilitySynchronizeDTO'
         required: true
       parameters:
         - in: query
@@ -236,7 +236,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/FXSpotDTO'
+                  $ref: '#/components/schemas/FXVolatilityDTO'
         '400':
           description: Invalid status value
           content:
@@ -258,6 +258,40 @@ components:
       scheme: basic
 
   schemas:
+
+    FXVolatilityDTO:
+      type: object
+      properties:
+        curr1:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: EUR
+        curr2:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: USD
+        valuationDate:
+          type: string
+          format: date
+          example: 2022-11-25
+        tenor:
+            type: string
+            minLength: 1
+            maxLength: 3
+            example: 1M
+        value:
+          type: number
+          format: double
+          minimum: 0
+          example: 2.5
+      required:
+        - curr1
+        - curr2
+        - date
+        - value
+        - tenor
 
     FXSpotDTO:
       type: object
@@ -325,6 +359,32 @@ components:
           type: string
           format: date
           example: 2022-11-25
+        required:
+          - curr1
+          - curr2
+          - date
+
+    FXVolatilitySynchronizeDTO:
+      type: object
+      properties:
+        curr1:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: EUR
+        curr2:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: USD
+        date:
+          type: string
+          format: date
+          example: 2022-11-25
+        provider:
+          type: string
+          example: BBG
+          default: 'BBG'
         required:
           - curr1
           - curr2

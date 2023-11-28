@@ -28,9 +28,7 @@ public class FXSpotListener {
 
     @Autowired
     MessagingProperties messagingProperties;
-
-
-    @RabbitListener(queues = {"#{messagingProperties.fxSpotHistoryRequestExchange.queue.name}"})
+    @RabbitListener(queues = {"#{messagingProperties.fxExchange.spotQueue.name}"})
     public void listen(Message in)  {
 
         String contentType = in.getMessageProperties().getContentType();
@@ -48,7 +46,7 @@ public class FXSpotListener {
             }
 
             if(logger.isDebugEnabled()) {
-                logger.debug(String.format("Message read from %s : %s", messagingProperties.getFxSpotHistoryRequestExchange().getQueue().getName(), in));
+                logger.debug(String.format("Message read from %s : %s", messagingProperties.getFxExchange().getSpotQueue().getName(), in));
             }
         } else {
             logger.error("Message is not JSON");
