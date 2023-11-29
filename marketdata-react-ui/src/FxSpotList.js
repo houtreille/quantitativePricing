@@ -2,8 +2,14 @@ import React, { Component } from 'react';
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { Link } from 'react-router-dom';
+import Char2 from "./fxSpotHistoryChart";
+import {Line} from 'react-chartjs-2';
+import FxSpotHistoryChart from "./fxSpotHistoryChart";
+import {VolSurface} from "./fxVolSurfaceChart";
 
-class FxSpotList extends Component {
+
+
+class FxSpotList extends Component{
 
     constructor(props) {
         super(props);
@@ -50,6 +56,9 @@ class FxSpotList extends Component {
         return (
             <div>
                 <AppNavbar/>
+                <VolSurface/>
+                <FxSpotHistoryChart/>
+
                 <Container fluid>
                     <div className="float-right">
                         <Button color="success" tag={Link} to="/fxSpot/new">Add Client</Button>
