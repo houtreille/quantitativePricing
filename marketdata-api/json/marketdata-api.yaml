@@ -4,9 +4,7 @@ info:
   title: MarketData Service API
   description: MarketData Service API
   version: 1.0.0
-servers:
-  - url: "[[${env.marketdata-service-url}]]"
-    description: XXX
+
 externalDocs:
   - url: "[[${env.marketdata-service-documentation-url}]]"
 
@@ -200,6 +198,45 @@ paths:
                 items:
                   $ref: '#/components/schemas/FXSpotDTO'
 
+  /fxVolatility/search:
+    post:
+      tags:
+        - fxVolatility
+      summary: Search a List of FX volatility for a given criteria
+      operationId: searchFxVolatility
+      requestBody:
+        content:
+          application/vnd.ams.fxVolatility-search-api+json:
+            schema:
+              $ref: '#/components/schemas/FXVolatilitySearchDTO'
+        required: true
+      responses:
+        '200':
+          description: Successfully returned a list with fxVolatility matching search criteria
+          content:
+            application/vnd.ams.fxVolatility-search-api.v2+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FXVolatilityDTO'
+
+
+        '400':
+          description: Invalid status value
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDTO'
+
+        default:
+          description: unexpected error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDTO'
+
+
+
   /fxVolatility/synchronize:
     post:
       tags:
@@ -262,36 +299,32 @@ components:
     FXVolatilityDTO:
       type: object
       properties:
-        curr1:
+        currencyPair:
           type: string
-          minLength: 3
-          maxLength: 3
-          example: EUR
-        curr2:
-          type: string
-          minLength: 3
-          maxLength: 3
-          example: USD
+          minLength: 6
+          maxLength: 6
+          example: EURUSD
         valuationDate:
           type: string
           format: date
           example: 2022-11-25
         tenor:
-            type: string
-            minLength: 1
-            maxLength: 3
-            example: 1M
-        value:
+          type: string
+          format: date
+        strike:
           type: number
           format: double
           minimum: 0
           example: 2.5
-      required:
-        - curr1
-        - curr2
-        - date
-        - value
-        - tenor
+        volatility:
+          type: number
+          format: double
+          minimum: 0
+          example: 2.5
+        provider:
+          type: string
+          example: BBG
+          default: 'BBG'
 
     FXSpotDTO:
       type: object
@@ -341,6 +374,32 @@ components:
         required:
           - curr1
           - curr2
+
+    FXVolatilitySearchDTO:
+      type: object
+      properties:
+        curr1:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: EUR
+        curr2:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: USD
+        date:
+          type: string
+          format: date
+          example: 2022-11-25
+        provider:
+          type: string
+          example: BBG
+          default: 'BBG'
+        required:
+          - curr1
+          - curr2
+          - date
 
     FXSpotSynchronizeDTO:
       type: object

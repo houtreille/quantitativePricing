@@ -1,7 +1,9 @@
 package org.eblood.marketdataservice.quantitative.mapper.json;
 
 import com.eblood.finance.quantitative.json.v1.FXSpotDTO;
+import com.eblood.finance.quantitative.json.v1.FXVolatilityDTO;
 import org.eblood.marketdataservice.quantitative.domain.model.entity.FxSpot;
+import org.eblood.marketdataservice.quantitative.domain.model.entity.FxVolatilityData;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
@@ -21,4 +23,9 @@ public interface JsonMapper {
     @Mapping(source="date", target="valueDate")
     @Mapping(source="value", target="value")
     FxSpot map(FXSpotDTO fxSpotDto);
+
+    FXVolatilityDTO mapVolatility(FxVolatilityData fxVolatilityData);
+
+    FxVolatilityData mapVolatility(FXVolatilityDTO fxVolatilityDto);
 }
+

@@ -51,7 +51,7 @@ public abstract class FXMessageProducer {
     }
 
     private MessageProperties getMessageProperties(FXSynchronizeRequest request) {
-        var messageProperties = new MessageProperties();
+        MessageProperties messageProperties = new MessageProperties();
         messageProperties.setHeader("contentType", CONTENT_TYPE_JSON);
         messageProperties.setHeader(DATASET_HEADER, getDataSet());
         //This contentType is required to make the MessageConverter use the adapted converter

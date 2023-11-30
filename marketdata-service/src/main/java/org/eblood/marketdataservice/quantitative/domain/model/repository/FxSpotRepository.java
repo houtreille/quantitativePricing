@@ -12,12 +12,8 @@ import java.util.Optional;
 public interface FxSpotRepository extends JpaRepository<FxSpot, Long> {
 
    List<FxSpot> findAll();
-
    List<FxSpot> findFxSpotByDomesticCurrAndForeignCurr(String domesticCurr, String foreignCurr);
-
    FxSpot getFxSpotByDomesticCurrAndForeignCurrAndValueDate(String domesticCurr, String foreignCurr, LocalDate valueDate);
-
-
    FxSpot findFirstByDomesticCurrAndForeignCurrOrderByValueDateDesc(String domesticCurr, String foreignCurr);
 
   // FxSpot findFirstByValueDateAndDomesticCurrAndForeignCurr(String domesticCurr, String foreignCurr);

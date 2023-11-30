@@ -1,7 +1,9 @@
 package org.eblood.marketdataservice.quantitative.service;
 
 import org.eblood.marketdataservice.quantitative.domain.model.entity.FxSpot;
+import org.eblood.marketdataservice.quantitative.domain.model.entity.FxVolatilityData;
 import org.eblood.marketdataservice.quantitative.domain.model.repository.FxSpotRepository;
+import org.eblood.marketdataservice.quantitative.domain.model.repository.FxVolatilityRepository;
 import org.eblood.marketdataservice.quantitative.messaging.model.FXSynchronizeRequest;
 import org.eblood.marketdataservice.quantitative.messaging.producer.FXSpotMessageProducer;
 import org.eblood.marketdataservice.quantitative.messaging.producer.FXVolatilityMessageProducer;
@@ -23,13 +25,20 @@ import java.util.stream.Collectors;
 public class FxVolatilityService {
 
     private final FXVolatilityMessageProducer producer;
+    private final FxVolatilityRepository repository;
 
     private final Logger log = org.slf4j.LoggerFactory.getLogger(FxVolatilityService.class);
 
     public FxVolatilityService(RabbitTemplate rabbitTemplate,
+                               FxVolatilityRepository repository,
                                FXVolatilityMessageProducer producer) {
         this.producer = producer;
+        this.repository = repository;
 
+    }
+
+    public List<FxVolatilityData> findAll() {
+        return this.repository.findAll();
     }
 
     public void sendSynchronizeRequest(FXSynchronizeRequest request) {
