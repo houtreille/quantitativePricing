@@ -9,6 +9,11 @@ export class VolSurface extends React.Component {
     }
 
     generateDataAndPlot = () => {
+
+        fetch('/fxVolatility')
+            .then(response => response.json())
+            .then(data => this.setState({fxSpots: data}));
+
         // Fonction factice pour générer des données de volatilité
         // Vous devez remplacer cette fonction par votre propre logique de génération de données
         const generateData = () => {

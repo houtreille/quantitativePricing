@@ -42,13 +42,25 @@ public class FXVolatitilyRestController implements FxVolatilityApi {
     }
 
     @Override
-    public ResponseEntity<List<FXVolatilityDTO>> searchFxVolatility(FXVolatilitySearchDTO body) {
+    public ResponseEntity<List<FXVolatilityDTO>> getAllFxVolatility() {
         List<FXVolatilityDTO> dtos = service.findAll()
                 .stream()
                 .map(jsonMapper::mapVolatility)
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(dtos);
+    }
+
+    @Override
+    public ResponseEntity<List<FXVolatilityDTO>> searchFxVolatility(FXVolatilitySearchDTO body) {
+
+        /**
+         * write me a loop from 0 to 1 and print it
+            */
+
+
+
+        return ResponseEntity.ok(null);
     }
 
     @Override

@@ -15,12 +15,12 @@ spring:
     password: marketdata_service_pwd123
 
 
-  #rabbitmq:
-    # host: localhost
-    #port: 5672
-    #username: marketdata
-    #password: password
-    #virtual-host: eblood.marketdata.dev.vhost
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: marketdata
+    password: password
+    virtual-host: eblood.marketdata.dev.vhost
       #listener:
       #simple:
       # acknowledge-mode: auto

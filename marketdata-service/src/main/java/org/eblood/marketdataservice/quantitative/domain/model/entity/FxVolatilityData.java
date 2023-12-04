@@ -27,10 +27,10 @@ public class FxVolatilityData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "CURRENCY_PAIR", nullable = false)
+    @Column(name = "CURRENCYPAIR", nullable = false)
     String currencyPair;
 
-    @Column(name = "VALUATION_DATE", nullable = false)
+    @Column(name = "VALUATIONDATE", nullable = false)
     Date valuationDate;
 
     @Column(name = "PROVIDER")

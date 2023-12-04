@@ -26,11 +26,9 @@ public class FxVolatilityService {
 
     private final FXVolatilityMessageProducer producer;
     private final FxVolatilityRepository repository;
-
     private final Logger log = org.slf4j.LoggerFactory.getLogger(FxVolatilityService.class);
 
-    public FxVolatilityService(RabbitTemplate rabbitTemplate,
-                               FxVolatilityRepository repository,
+    public FxVolatilityService(FxVolatilityRepository repository,
                                FXVolatilityMessageProducer producer) {
         this.producer = producer;
         this.repository = repository;

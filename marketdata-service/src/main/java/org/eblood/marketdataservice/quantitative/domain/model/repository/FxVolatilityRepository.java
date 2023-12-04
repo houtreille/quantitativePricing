@@ -11,6 +11,6 @@ import java.util.List;
 public interface FxVolatilityRepository extends JpaRepository<FxVolatilityData, Long> {
     public List<FxVolatilityData> findAll();
 
-    public List<FxVolatilityData> findFxVolatilityDataByCurrencyPairAndValueDate(String currencyPair, String valueDate);
+    public List<FxVolatilityData> findFxVolatilityDataByCurrencyPairAndValuationDate(String currencyPair, String valueDate);
 
 }

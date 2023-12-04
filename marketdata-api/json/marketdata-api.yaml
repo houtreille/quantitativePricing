@@ -198,7 +198,21 @@ paths:
                 items:
                   $ref: '#/components/schemas/FXSpotDTO'
 
-  /fxVolatility/search:
+  /fxVolatility:
+    get:
+      tags:
+        -fxSpot
+      summary: get all fxVolatility
+      operationId: getAllFxVolatility
+      responses:
+        '200':
+          description: FX Volatility successfully retrieved
+          content:
+            application/volatility+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FXVolatilityDTO'
     post:
       tags:
         - fxVolatility
