@@ -19,7 +19,7 @@ docker build --tag [SERVICE_NAME] .
 if you want to test your image running locally :
 
 ```
- docker run -p [MAPPED_PORT]:[PORT] [SERVICE_NAME]:latest -detached
+ docker run --name NAME -p [MAPPED_PORT]:[PORT] [SERVICE_NAME]:latest -detached
 ```
 
 ## Push your image to your docker repo 
@@ -125,3 +125,5 @@ minikube service health-service
 Links :
 
 [https://www.baeldung.com/spring-boot-minikube]()
+
+https://siweheee.medium.com/deploy-your-programs-onto-minikube-with-docker-and-helm-a68097e8d545

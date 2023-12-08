@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: health-service
+spec:
+  selector:
+    app: health-service
+  ports:
+    - protocol: TCP
+      port: 8090
+      nodePort: 30090
+  type: NodePort
