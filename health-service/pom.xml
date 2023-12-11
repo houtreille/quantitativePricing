@@ -46,7 +46,29 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <!--plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>docker-build</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+
+                        <configuration>
+                            <executable>mvn</executable>
+                            <arguments>
+                                <argument>io.fabric8:docker-maven-plugin:build</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>0.39.1</version>
@@ -64,10 +86,15 @@
                                     <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                                 </args>
                             </build>
+                            <run>
+                                <ports>
+                                    <port>18090:8090</port>
+                                </ports>
+                            </run>
                         </image>
                     </images>
                 </configuration>
-            </plugin-->
+            </plugin>
         </plugins>
     </build>
 

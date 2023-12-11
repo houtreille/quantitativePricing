@@ -1,0 +1,24 @@
+# https://docs.docker.com/compose/compose-file
+#
+# This file is starting all the marketdata-service stack :
+#
+# 1. The RabbitMQ instance
+# 2. The MS SQL server instance
+# 3. The marketdata-service (built using the dockerfile definition)
+#
+# Don't forget to package the marketdata-service before running this docker-compose file.
+# Using `mvn clean package` for example.
+#
+version: '3'
+
+services:
+
+  # health-service instance (built using Dockerfile)
+  marketdata-service:
+    container_name: health-service
+    build:
+      context: health-service
+      dockerfile: Dockerfile
+    image: health-service:latest
+    ports:
+      - 18090:8090

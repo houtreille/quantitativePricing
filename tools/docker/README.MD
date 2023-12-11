@@ -51,6 +51,42 @@ docker-compose config
 docker-compose up --build
 ```
 
+if fabric8 is installed with following configuration :
+
+
+ <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.39.1</version>
+                <configuration>
+
+                    <images>
+                        <image>
+                            <name>docker.io/mhoutreille/health-service</name>
+                            <build>
+                                <tags>
+                                    <tag>${project.version}</tag>
+                                </tags>
+                                <contextDir>${project.basedir}</contextDir>
+                                <args>
+                                    <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                                </args>
+                            </build>
+                            <run>
+                                <ports>
+                                    <port>18090:8090</port>
+                                </ports>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+            </plugin>
+
+just launch the command :
+
+```
+mvn docker:build docker:run
+```
 # Kube
 
  First install [https://minikube.sigs.k8s.io/docs/start/](Minikube)
@@ -120,6 +156,33 @@ Let's test our application (On particular configuration like Darwin+Docker a tun
 ```bash
 minikube service health-service
 ```
+
+# Kube with helm 
+
+delete namespace :
+
+```bash
+kubectl delete namespace quantitative
+```
+
+Create a new helm chart definition in a separate directory
+
+```bash
+helm create health-service-deploy
+```
+
+then to deploy :
+
+```bash
+helm install hs --namespace quantitative ./health-service-deploy
+```
+
+where 
+    -install will be the name 
+    -quantitative the namespace
+
+go to Lens/minikube and check logs of your deployment/pod 
+go on your port forwarding and check 
 
 
 Links :
