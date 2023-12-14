@@ -17,6 +17,8 @@ import org.eblood.marketdataservice.quantitative.mapper.json.JsonMapper;
 import org.eblood.marketdataservice.quantitative.messaging.model.FXSynchronizeRequest;
 import org.eblood.marketdataservice.quantitative.service.FxSpotService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,6 +31,9 @@ public class FXSpotRestController implements FxSpotApi {
 
     private final FxSpotService service;
     private final JsonMapper jsonMapper;
+
+    @Autowired
+    private Environment env;
 
     public FXSpotRestController(FxSpotService service,
                                 JsonMapper jsonMapper) {
@@ -82,6 +87,10 @@ public class FXSpotRestController implements FxSpotApi {
 
     @Override
     public ResponseEntity<List<FXSpotDTO>> getAllFxSpots() {
+
+        System.out.println(env.getProperty("server.port"));
+        System.out.println(env.getProperty("spring.datasource.driverClassName"));
+
          List<FXSpotDTO> fxSpotDTOS = service.findAll().stream()
                  .map(fxSpot -> jsonMapper.map(fxSpot))
                  .collect(Collectors.toList());
