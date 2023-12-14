@@ -1,0 +1,60 @@
+# https://docs.docker.com/compose/compose-file
+#
+# This file is starting all the marketdata-service stack :
+#
+# 1. The RabbitMQ instance
+# 2. The MS SQL server instance
+# 3. The marketdata-service (built using the dockerfile definition)
+#
+# Don't forget to package the marketdata-service before running this docker-compose file.
+# Using `mvn clean package` for example.
+#
+version: '3'
+
+services:
+
+  # RabbitMQ instance
+  rabbitmq:
+    image:  docker.pictet.io/ams/rabbitmq:3.7.12
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    volumes:
+      - ./docker-compose-config/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+
+  # MS Sql server instance
+  sqlserver:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=MyC0m9l&xP@ssw0rd
+
+  # Database initialisation (create schema + user)
+  mssql-tools:
+    image: mcr.microsoft.com/mssql-tools
+    volumes:
+      - ./docker-compose-config/mssql:/mnt:ro
+    command: ["/opt/mssql-tools/bin/sqlcmd","-Usa","-P", "MyC0m9l&xP@ssw0rd","-S", "sqlserver","-i", "/mnt/scripts/create_schema.sql"]
+    depends_on:
+      - sqlserver
+    #Restart on failure : because sometimes the container is starting faster than SQL Server. So we need to retry the schema creation
+    restart: on-failure
+
+  # marketdata-service instance (built using Dockerfile)
+  marketdata-service:
+    container_name: marketdata-service
+    image: mhoutreille/marketdata-service:latest
+    ports:
+      - 18081:8081
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://sqlserver:1433;databaseName=marketdata_service
+      - SPRING_DATASOURCE_PASSWORD=marketdata_service_pwd123
+      - SPRING_FLYWAY_URL=jdbc:sqlserver://sqlserver:1433;database=marketdata_service
+      - SPRING_FLYWAY_PASSWORD=marketdata_service_pwd123
+    depends_on:
+      - sqlserver
+      - rabbitmq

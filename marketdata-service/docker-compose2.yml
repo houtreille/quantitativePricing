@@ -1,0 +1,25 @@
+# https://docs.docker.com/compose/compose-file
+#
+# This file is starting all the marketdata-service stack :
+#
+# 1. The RabbitMQ instance
+# 2. The MS SQL server instance
+# 3. The marketdata-service (built using the dockerfile definition)
+#
+# Don't forget to package the marketdata-service before running this docker-compose file.
+# Using `mvn clean package` for example.
+#
+version: '3'
+
+services:
+
+
+  # MS Sql server instance
+  sqlserver:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    ports:
+      - "1435:1435"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=MyC0m9l&xP@ssw0rd
+
