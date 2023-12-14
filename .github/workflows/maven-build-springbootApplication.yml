@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main  # Adjust the branch name as per your requirement
+      - gh_workflow_aws
   pull_request:
     branches:
       - main  # Adjust the branch name as per your requirement
+      - gh_workflow_aws
 
 jobs:
   build:
