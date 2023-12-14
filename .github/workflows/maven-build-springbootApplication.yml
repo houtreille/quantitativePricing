@@ -1,0 +1,37 @@
+name: Build Spring Boot Artifact
+
+on:
+  push:
+    branches:
+      - main  # Adjust the branch name as per your requirement
+  pull_request:
+    branches:
+      - main  # Adjust the branch name as per your requirement
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  # Choose the Java version needed for your Spring Boot project
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml  # Adjust if your POM file is in a different location
+
+      - name: Create a timestamp for artifact
+        id: time
+        uses: nansm/get-time-action@v1.1
+        with:
+          format: 'YYYY-MM-DD:HH:mm:ss'
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: spring-boot-artifact
+          path: marketdata-service/target/marketdata-service-0.0.1-${{steps.time.outputs.time}}.jar  # Adjust the path to your Spring Boot artifact
