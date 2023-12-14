@@ -28,7 +28,7 @@ jobs:
 
       - name: Create a timestamp for artifact
         id: time
-        uses: nansm/get-time-action@v1.1
+        uses: nanzm/get-time-action@v1.1
         with:
           format: 'YYYY-MM-DD:HH:mm:ss'
 
