@@ -11,6 +11,6 @@ public class SayHelloController {
     @GetMapping("/hello")
     public String sayHello() {
         System.out.println("Endpoint reached !");
-        return "Hello !";
+        return "Hello Azure !";
     }
 }
