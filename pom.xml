@@ -10,10 +10,11 @@
   <packaging>pom</packaging>
 
   <modules>
-      <module>quantitative-pricing-api</module>
+      <!--module>quantitative-pricing-api</module>
       <module>quantitative-pricing-service</module>
       <module>marketdata-api</module>
-      <module>marketdata-service</module>
+      <module>marketdata-service</module-->
+      <module>health-service</module>
   </modules>
 
   <properties>
