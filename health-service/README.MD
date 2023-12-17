@@ -1,3 +1,4 @@
+[![Build and deploy JAR app to Azure Web App - eblood-health-service](https://github.com/houtreille/quantitativePricing/actions/workflows/master_eblood-health-service.yml/badge.svg?branch=master)](https://github.com/houtreille/quantitativePricing/actions/workflows/master_eblood-health-service.yml)
 The aim of this project is get used with docker and kubernetes.
 
 # Docker
